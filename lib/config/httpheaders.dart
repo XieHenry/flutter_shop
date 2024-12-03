@@ -1,0 +1,16 @@
+const httpHeaders={
+'authority':'static001.geekbang.org',
+'method':'GET',
+'path':'/static/time/menu/sub_data.json?v=28885207',
+'scheme':'https',
+'accept':'*/*',
+'accept-encoding':'gzip, deflate, br, zstd',
+'accept-language':'zh-CN,zh;q=0.9',
+'origin':'https://time.geekbang.org',
+'priority':'u=1, i',
+'referer':'https://time.geekbang.org/',
+'sec-fetch-dest':'empty',
+'sec-fetch-mode':'cors',
+'sec-fetch-site':'same-site',
+'user-agent':'Mozilla/5.0 (iPad; CPU OS 16_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.6 Mobile/15E148 Safari/604.1',
+};

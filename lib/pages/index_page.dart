@@ -4,7 +4,8 @@ import 'home_page.dart';
 import 'category_page.dart';
 import 'member_page.dart';
 import 'cart_page.dart';
-
+import 'people_search.dart';
+import 'weizao_headerhttp.dart';
 
 
 class IndexPage extends StatefulWidget {
@@ -31,16 +32,22 @@ class _IndexPageState extends State<IndexPage> {
     const BottomNavigationBarItem(
         icon: Icon(CupertinoIcons.profile_circled),
         label: "会员中心"
-    )
+    ),
+    const BottomNavigationBarItem(
+        icon: Icon(CupertinoIcons.info),
+        label: "人物查找"
+    ),
   ];
 
 
   List<Widget> get tabBodies =>
       [
-        HomePage(),
-        CategoryPage(),
-        CartPage(),
-        MemberPage()
+        const HomePage(),
+        const CategoryPage(),
+        const CartPage(),
+        // const MemberPage(),
+        PeopleSearch(),
+        const WeizaoHttpPage()
       ];
 
 
