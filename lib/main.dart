@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import './pages/index_page.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
+  ScreenUtil.ensureScreenSize();
   runApp(const MyApp());
 }
 
@@ -12,6 +14,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context);
+    ScreenUtil.init(context, designSize: const Size(750, 1334));
     return  MaterialApp(
       title: "百姓生活+",
       debugShowCheckedModeBanner: false, //去除Debug

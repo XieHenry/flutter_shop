@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_shop/service/service_method.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
 import 'dart:convert';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -58,12 +59,16 @@ class SwiperDiy extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("设备像素密度:${ScreenUtil().pixelRatio}");
+    print("设备的高:${ScreenUtil().scaleHeight}");
+    print("设备的宽:${ScreenUtil().scaleWidth}");
+
     return Container(
-      height: 333,
+      height: ScreenUtil().setHeight(400),
+      width: ScreenUtil().setWidth(750),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
           print(swiperDateList);
-
           return Image.network("${swiperDateList[index]["base_cover"]}",
               fit: BoxFit.fill);
         },

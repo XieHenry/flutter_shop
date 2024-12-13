@@ -40,7 +40,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   dio: ^5.7.0                    #网络请求库
   flutter_swiper_view: ^1.1.8    #轮播图
-
+  flutter_screenutil: ^5.9.3  #屏幕适配
 
 
 
