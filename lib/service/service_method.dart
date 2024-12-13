@@ -15,8 +15,6 @@ Future getHomePageContent() async {
     dio.options.contentType = "application/json";
 
     var formData = {
-      "page" : "1",
-      "size" : "5"
     };
 
     dio.options.headers = httpHeaders;

@@ -38,8 +38,13 @@ class _HomePageState extends State<HomePage> {
               // 解析数据
               var data = snapshot.data as Map<String, dynamic>;
               var list = data["data"]["list"] as List<dynamic>;
+              var navgatorListlist = data["data"]["list"] as List<dynamic>;
+
               return Column(
-                children: [SwiperDiy(swiperDateList: list)],
+                children: <Widget>[
+                  SwiperDiy(swiperDateList: list),
+                  TopNavgator(navigatorList:navgatorListlist),
+                ],
               );
             } else {
               return Center(child: Text("加载中......"));
@@ -63,19 +68,63 @@ class SwiperDiy extends StatelessWidget {
     print("设备的高:${ScreenUtil().scaleHeight}");
     print("设备的宽:${ScreenUtil().scaleWidth}");
 
+    if(this.swiperDateList.length > 10) {
+      this.swiperDateList.removeRange(10, this.swiperDateList.length);
+    }
+
     return Container(
       height: ScreenUtil().setHeight(400),
       width: ScreenUtil().setWidth(750),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
           print(swiperDateList);
-          return Image.network("${swiperDateList[index]["base_cover"]}",
+          return Image.network("${swiperDateList[index]["icon"]}",
               fit: BoxFit.fill);
         },
         itemCount: swiperDateList.length,
         pagination: SwiperPagination(),
         autoplay: true,
       ),
+    );
+  }
+}
+
+//金刚区域
+class TopNavgator extends StatelessWidget {
+  final List navigatorList;
+  TopNavgator({Key? key, required this.navigatorList}) : super(key: key);
+
+  Widget _gridViewItemUI(BuildContext content, item) {
+    return InkWell(
+      onTap: (){
+        print("点击了导航");
+      },
+      child: Column(
+        children: <Widget>[
+          Image.network(item["icon"],width: ScreenUtil().setWidth(95)),
+          Text(item["name"])
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    //对数据进行截取，只保留10个
+    if(this.navigatorList.length > 10) {
+      this.navigatorList.removeRange(10, this.navigatorList.length);
+    }
+
+    return Container(
+      height: ScreenUtil().setHeight(320),
+      padding: EdgeInsets.all(3),
+      child: GridView.count(
+          crossAxisCount: 5,
+      padding: EdgeInsets.all(5),
+        children: navigatorList.map((item){
+          return _gridViewItemUI(context, item);
+        }).toList(),
+        )
     );
   }
 }
