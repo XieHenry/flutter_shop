@@ -39,15 +39,19 @@ class _HomePageState extends State<HomePage> {
               var data = snapshot.data as Map<String, dynamic>;
               var scrolist = data["data"]["list"] as List<dynamic>;
               var navgatorListlist = data["data"]["list"] as List<dynamic>;
+
               var adPictureList = data["data"]["list"] as List<dynamic>;
-              var firstDic = adPictureList.first;
-              String adpicture = firstDic["icon"];
+              String adpicture = adPictureList.first["icon"];
+
+              String leaderImage = adPictureList[2]["icon"];
+              String leadPhone = "18611696476";
 
               return Column(
                 children: <Widget>[
                   SwiperDiy(swiperDateList: scrolist),
                   TopNavgator(navigatorList: navgatorListlist),
                   AdBanner(adPicture: adpicture),
+                  LeaderPhone(leaderImage: leaderImage, leaderPhone: leadPhone),
                 ],
               );
             } else {
@@ -77,7 +81,7 @@ class SwiperDiy extends StatelessWidget {
     }
 
     return Container(
-      height: ScreenUtil().setHeight(400),
+      height: ScreenUtil().setHeight(300),
       width: ScreenUtil().setWidth(750),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
@@ -140,12 +144,38 @@ class AdBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setHeight(80),
+      height: ScreenUtil().setHeight(60),
       width: ScreenUtil().setWidth(750),
       child: Image.network(
         adPicture,
         fit: BoxFit.cover,
       ),
     );
+  }
+}
+
+class LeaderPhone extends StatelessWidget {
+  final String leaderImage; //店长图片
+  final String leaderPhone; //店长电话
+
+  LeaderPhone({Key? key, required this.leaderImage, required this.leaderPhone})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    padding:
+    EdgeInsets.all(5);
+    return Container(
+      height: ScreenUtil().setHeight(100),
+      width: ScreenUtil().setWidth(750),
+      child: InkWell(
+        onTap: _launchUrl,
+        child: Image.network(leaderImage, fit: BoxFit.cover),
+      ),
+    );
+  }
+
+  void _launchUrl() async {
+    print("打印手机号：${leaderPhone}");
   }
 }
