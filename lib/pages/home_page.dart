@@ -37,13 +37,17 @@ class _HomePageState extends State<HomePage> {
             if (snapshot.hasData) {
               // 解析数据
               var data = snapshot.data as Map<String, dynamic>;
-              var list = data["data"]["list"] as List<dynamic>;
+              var scrolist = data["data"]["list"] as List<dynamic>;
               var navgatorListlist = data["data"]["list"] as List<dynamic>;
+              var adPictureList = data["data"]["list"] as List<dynamic>;
+              var firstDic = adPictureList.first;
+              String adpicture = firstDic["icon"];
 
               return Column(
                 children: <Widget>[
-                  SwiperDiy(swiperDateList: list),
-                  TopNavgator(navigatorList:navgatorListlist),
+                  SwiperDiy(swiperDateList: scrolist),
+                  TopNavgator(navigatorList: navgatorListlist),
+                  AdBanner(adPicture: adpicture),
                 ],
               );
             } else {
@@ -68,7 +72,7 @@ class SwiperDiy extends StatelessWidget {
     print("设备的高:${ScreenUtil().scaleHeight}");
     print("设备的宽:${ScreenUtil().scaleWidth}");
 
-    if(this.swiperDateList.length > 10) {
+    if (this.swiperDateList.length > 10) {
       this.swiperDateList.removeRange(10, this.swiperDateList.length);
     }
 
@@ -96,12 +100,12 @@ class TopNavgator extends StatelessWidget {
 
   Widget _gridViewItemUI(BuildContext content, item) {
     return InkWell(
-      onTap: (){
+      onTap: () {
         print("点击了导航");
       },
       child: Column(
         children: <Widget>[
-          Image.network(item["icon"],width: ScreenUtil().setWidth(95)),
+          Image.network(item["icon"], width: ScreenUtil().setWidth(95)),
           Text(item["name"])
         ],
       ),
@@ -111,20 +115,37 @@ class TopNavgator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //对数据进行截取，只保留10个
-    if(this.navigatorList.length > 10) {
+    if (this.navigatorList.length > 10) {
       this.navigatorList.removeRange(10, this.navigatorList.length);
     }
 
     return Container(
-      height: ScreenUtil().setHeight(320),
-      padding: EdgeInsets.all(3),
-      child: GridView.count(
+        height: ScreenUtil().setHeight(260),
+        padding: EdgeInsets.all(5),
+        child: GridView.count(
           crossAxisCount: 5,
-      padding: EdgeInsets.all(5),
-        children: navigatorList.map((item){
-          return _gridViewItemUI(context, item);
-        }).toList(),
-        )
+          padding: EdgeInsets.all(5),
+          children: navigatorList.map((item) {
+            return _gridViewItemUI(context, item);
+          }).toList(),
+        ));
+  }
+}
+
+//广告
+class AdBanner extends StatelessWidget {
+  final String adPicture;
+  AdBanner({Key? key, required this.adPicture}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: ScreenUtil().setHeight(80),
+      width: ScreenUtil().setWidth(750),
+      child: Image.network(
+        adPicture,
+        fit: BoxFit.cover,
+      ),
     );
   }
 }
