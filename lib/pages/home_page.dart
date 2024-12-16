@@ -38,30 +38,76 @@ class _HomePageState extends State<HomePage> {
               // 解析数据
               var data = snapshot.data as Map<String, dynamic>;
               var scrolist = data["data"]["list"] as List<dynamic>;
+
               var navgatorListlist = data["data"]["list"] as List<dynamic>;
-
-              var adPictureList = data["data"]["list"] as List<dynamic>;
-              String adpicture = adPictureList.first["icon"];
-
-              String leaderImage = adPictureList[2]["icon"];
-              String leadPhone = "18611696476";
-
-              var recommendList = data["data"]["list"] as List<dynamic>;
 
               return SingleChildScrollView( //避免超出屏幕
                 child: Column(
                   children: <Widget>[
                     SwiperDiy(swiperDateList: scrolist),
                     TopNavgator(navigatorList: navgatorListlist),
-                    AdBanner(adPicture: adpicture),
-                    LeaderPhone(
-                        leaderImage: leaderImage, leaderPhone: leadPhone),
-                    Recommend(recommonedList: recommendList),
+
+
+
+                    FutureBuilder(
+                      future: getHomeAdContent(),
+                      builder: (context, adSnapshot) {
+                        if (adSnapshot.hasData) {
+                          var data = adSnapshot.data as Map<String, dynamic>;
+                          var adPictureList = data["data"]["list"] as List<dynamic>;
+                          String adpicture = adPictureList.first["banner_cover"];
+
+                          return AdBanner(adPicture: adpicture);
+                        } else {
+                          return const Center(child: Text("广告数据加载中......"));
+                        }
+                      },
+                    ),
+
+
+                    FutureBuilder(
+                      future: getHomeAdContent(),
+                      builder: (context, adSnapshot) {
+                        if (adSnapshot.hasData) {
+                          var data = adSnapshot.data as Map<String, dynamic>;
+                          var navgatorListlist = data["data"]["list"] as List<dynamic>;
+
+                          String leaderImage = navgatorListlist[1]["banner_cover"];
+                          String leadPhone = "010-7708374";
+
+                          return LeaderPhone(
+                              leaderImage: leaderImage, leaderPhone: leadPhone);
+
+                        } else {
+                          return const Center(child: Text("广告数据加载中......"));
+                        }
+                      },
+                    ),
+
+
+
+
+                    FutureBuilder(
+                      future: getHomeCommendContent(),
+                      builder: (context, recommendSnapshot) {
+                        if (recommendSnapshot.hasData) {
+                          var data = recommendSnapshot.data as Map<String, dynamic>;
+                          var recommendList = data["data"]["products"] as List<dynamic>;
+                          return Recommend(recommonedList: recommendList);
+
+                        } else {
+                          return const Center(child: Text("推荐商品加载中......"));
+                        }
+                      },
+                    ),
+
+
+
                   ],
                 ),
               );
             } else {
-              return Center(child: Text("加载中......"));
+              return const Center(child: Text("加载中......"));
             }
           },
         ),
@@ -150,16 +196,18 @@ class AdBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: ScreenUtil().setHeight(60),
+      height: ScreenUtil().setHeight(120),
       width: ScreenUtil().setWidth(750),
+      margin: const EdgeInsets.only(top: 10),
       child: Image.network(
         adPicture,
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
       ),
     );
   }
 }
 
+//店长电话
 class LeaderPhone extends StatelessWidget {
   final String leaderImage; //店长图片
   final String leaderPhone; //店长电话
@@ -169,14 +217,13 @@ class LeaderPhone extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    padding:
-    EdgeInsets.all(5);
     return Container(
-      height: ScreenUtil().setHeight(100),
+      height: ScreenUtil().setHeight(120),
       width: ScreenUtil().setWidth(750),
+      margin: const EdgeInsets.only(top: 10),
       child: InkWell(
         onTap: _launchUrl,
-        child: Image.network(leaderImage, fit: BoxFit.cover),
+        child: Image.network(leaderImage, fit: BoxFit.fill),
       ),
     );
   }
@@ -194,7 +241,7 @@ class Recommend extends StatelessWidget {
   Widget _titleWidget() {
     return Container(
       alignment: Alignment.centerLeft,
-      padding: const EdgeInsets.fromLTRB(10, 2, 0, 5),
+      padding: const EdgeInsets.fromLTRB(10, 10, 0, 5),
       decoration: const BoxDecoration(
           color: Colors.white,
           border:
@@ -217,10 +264,10 @@ class Recommend extends StatelessWidget {
                 Border(left: BorderSide(width: 0.5, color: Colors.black12))),
         child: Column(
           children: <Widget>[
-            Image.network(recommonedList[index]["icon"]),
-            Text("¥${recommonedList[index]["name"]}"),
+            Image.network(recommonedList[index]["author"]["avatar"]),
+            Text("¥${recommonedList[index]["extra"]["first_promo"]["price"]}"),
             Text(
-              "¥${recommonedList[index]["name"]}",
+              "¥${recommonedList[index]["price"]["market"]}",
               style: const TextStyle(
                   decoration: TextDecoration.lineThrough, color: Colors.grey),
             ),
