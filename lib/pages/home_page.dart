@@ -46,13 +46,19 @@ class _HomePageState extends State<HomePage> {
               String leaderImage = adPictureList[2]["icon"];
               String leadPhone = "18611696476";
 
-              return Column(
-                children: <Widget>[
-                  SwiperDiy(swiperDateList: scrolist),
-                  TopNavgator(navigatorList: navgatorListlist),
-                  AdBanner(adPicture: adpicture),
-                  LeaderPhone(leaderImage: leaderImage, leaderPhone: leadPhone),
-                ],
+              var recommendList = data["data"]["list"] as List<dynamic>;
+
+              return SingleChildScrollView( //避免超出屏幕
+                child: Column(
+                  children: <Widget>[
+                    SwiperDiy(swiperDateList: scrolist),
+                    TopNavgator(navigatorList: navgatorListlist),
+                    AdBanner(adPicture: adpicture),
+                    LeaderPhone(
+                        leaderImage: leaderImage, leaderPhone: leadPhone),
+                    Recommend(recommonedList: recommendList),
+                  ],
+                ),
               );
             } else {
               return Center(child: Text("加载中......"));
@@ -90,7 +96,7 @@ class SwiperDiy extends StatelessWidget {
               fit: BoxFit.fill);
         },
         itemCount: swiperDateList.length,
-        pagination: SwiperPagination(),
+        pagination: const SwiperPagination(),
         autoplay: true,
       ),
     );
@@ -177,5 +183,75 @@ class LeaderPhone extends StatelessWidget {
 
   void _launchUrl() async {
     print("打印手机号：${leaderPhone}");
+  }
+}
+
+//商品推荐
+class Recommend extends StatelessWidget {
+  final List recommonedList;
+  Recommend({Key? key, required this.recommonedList}) : super(key: key);
+
+  Widget _titleWidget() {
+    return Container(
+      alignment: Alignment.centerLeft,
+      padding: const EdgeInsets.fromLTRB(10, 2, 0, 5),
+      decoration: const BoxDecoration(
+          color: Colors.white,
+          border:
+              Border(bottom: BorderSide(width: 0.5, color: Colors.black12))),
+      child: const Text("商品推荐", style: TextStyle(color: Colors.pink)),
+    );
+  }
+
+  //商品单独项方法
+  Widget _item(index) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        height: ScreenUtil().setHeight(330),
+        width: ScreenUtil().setWidth(750 / 3),
+        padding: const EdgeInsets.all(8),
+        decoration: const BoxDecoration(
+            color: Colors.white,
+            border:
+                Border(left: BorderSide(width: 0.5, color: Colors.black12))),
+        child: Column(
+          children: <Widget>[
+            Image.network(recommonedList[index]["icon"]),
+            Text("¥${recommonedList[index]["name"]}"),
+            Text(
+              "¥${recommonedList[index]["name"]}",
+              style: const TextStyle(
+                  decoration: TextDecoration.lineThrough, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  //横向列表
+  Widget _recommedList() {
+    return Container(
+      height: ScreenUtil().setHeight(300),
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: recommonedList.length,
+        itemBuilder: (context, index) {
+          return _item(index);
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: ScreenUtil().setHeight(380),
+      margin: const EdgeInsets.only(top: 10),
+      child: Column(
+        children: <Widget>[_titleWidget(), _recommedList()],
+      ),
+    );
   }
 }
