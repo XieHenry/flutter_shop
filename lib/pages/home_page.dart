@@ -12,11 +12,11 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-
 /*
  ** AutomaticKeepAliveClientMixin 页面保持不动
  */
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
 
@@ -24,11 +24,6 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
   @override
   void initState() {
-    getHomePageContent().then((val) {
-      setState(() {
-        homePageContent = val.toString();
-      });
-    });
     super.initState();
   }
 
@@ -48,21 +43,22 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
 
               var navgatorListlist = data["data"]["list"] as List<dynamic>;
 
-              return SingleChildScrollView( //避免超出屏幕
+              return SingleChildScrollView(
+                //避免超出屏幕
                 child: Column(
                   children: <Widget>[
                     SwiperDiy(swiperDateList: scrolist),
                     TopNavgator(navigatorList: navgatorListlist),
-
-
 
                     FutureBuilder(
                       future: getHomeAdContent(),
                       builder: (context, adSnapshot) {
                         if (adSnapshot.hasData) {
                           var data = adSnapshot.data as Map<String, dynamic>;
-                          var adPictureList = data["data"]["list"] as List<dynamic>;
-                          String adpicture = adPictureList.first["banner_cover"];
+                          var adPictureList =
+                              data["data"]["list"] as List<dynamic>;
+                          String adpicture =
+                              adPictureList.first["banner_cover"];
 
                           return AdBanner(adPicture: adpicture);
                         } else {
@@ -71,73 +67,63 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                       },
                     ),
 
-
                     FutureBuilder(
                       future: getHomeAdContent(),
                       builder: (context, adSnapshot) {
                         if (adSnapshot.hasData) {
                           var data = adSnapshot.data as Map<String, dynamic>;
-                          var navgatorListlist = data["data"]["list"] as List<dynamic>;
+                          var navgatorListlist =
+                              data["data"]["list"] as List<dynamic>;
 
-                          String leaderImage = navgatorListlist[1]["banner_cover"];
+                          String leaderImage =
+                              navgatorListlist[1]["banner_cover"];
                           String leadPhone = "010-7708374";
 
                           return LeaderPhone(
                               leaderImage: leaderImage, leaderPhone: leadPhone);
-
                         } else {
                           return const Center(child: Text("广告数据加载中......"));
                         }
                       },
                     ),
 
-
-
-
                     FutureBuilder(
                       future: getHomeCommendContent(),
                       builder: (context, recommendSnapshot) {
                         if (recommendSnapshot.hasData) {
-                          var data = recommendSnapshot.data as Map<String, dynamic>;
-                          var recommendList = data["data"]["products"] as List<dynamic>;
+                          var data =
+                              recommendSnapshot.data as Map<String, dynamic>;
+                          var recommendList =
+                              data["data"]["products"] as List<dynamic>;
                           return Recommend(recommonedList: recommendList);
-
                         } else {
                           return const Center(child: Text("推荐商品加载中......"));
                         }
                       },
                     ),
-
 
                     //商品推荐
                     FutureBuilder(
                       future: getHomeCommendContent(),
                       builder: (context, recommendSnapshot) {
                         if (recommendSnapshot.hasData) {
-                          var data = recommendSnapshot.data as Map<String, dynamic>;
+                          var data =
+                              recommendSnapshot.data as Map<String, dynamic>;
 
-                          String floor1Title = "楼层1";
-                          String floor2Title = "楼层2";
-                          String floor3Title = "楼层3";
 
+                          var floorList =
+                              data["data"]["products"] as List<dynamic>;
+
+
+                          String floor1Title = "https://static001.geekbang.org/resource/image/e5/2e/e5cd7aa753e88e4e7561207fb75b512e.png?x-oss-process=image/resize,m_fill,h_118,w_345";
                           FloorTitle(picture_address: floor1Title);
-                          FloorTitle(picture_address: floor2Title);
-                          FloorTitle(picture_address: floor2Title);
 
-
-                          var floorList = data["data"]["products"] as List<dynamic>;
                           return FloorContent(floorGoodList: floorList);
-
                         } else {
                           return const Center(child: Text("推荐商品加载中......"));
                         }
                       },
                     ),
-
-
-
-
-
                   ],
                 ),
               );
@@ -172,7 +158,6 @@ class SwiperDiy extends StatelessWidget {
       width: ScreenUtil().setWidth(750),
       child: Swiper(
         itemBuilder: (BuildContext context, int index) {
-          print(swiperDateList);
           return Image.network("${swiperDateList[index]["icon"]}",
               fit: BoxFit.fill);
         },
@@ -279,8 +264,7 @@ class Recommend extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(10, 10, 0, 5),
       decoration: const BoxDecoration(
           color: Colors.white,
-          border:
-              Border(bottom: BorderSide(width: 1, color: Colors.black12))),
+          border: Border(bottom: BorderSide(width: 1, color: Colors.black12))),
       child: const Text("商品推荐", style: TextStyle(color: Colors.pink)),
     );
   }
@@ -338,14 +322,12 @@ class Recommend extends StatelessWidget {
   }
 }
 
-
 //楼层标题
 class FloorTitle extends StatelessWidget {
   final String picture_address;
 
-  FloorTitle({Key? key, required this.picture_address}) : super (key: key);
+  FloorTitle({Key? key, required this.picture_address}) : super(key: key);
 
-  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -355,28 +337,22 @@ class FloorTitle extends StatelessWidget {
   }
 }
 
-
-
 //楼层商品列表
 class FloorContent extends StatelessWidget {
   final List floorGoodList;
 
-  FloorContent({Key? key, required this.floorGoodList}) : super (key: key);
+  FloorContent({Key? key, required this.floorGoodList}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Column(
-        children: <Widget>[
-          _firstRow(),
-          _otherGoods()
-        ],
+        children: <Widget>[_firstRow(), _otherGoods()],
       ),
     );
   }
 
-
-  Widget _firstRow(){
+  Widget _firstRow() {
     return Row(
       children: <Widget>[
         _goodsItem(floorGoodList[0]),
@@ -386,13 +362,11 @@ class FloorContent extends StatelessWidget {
             _goodsItem(floorGoodList[2])
           ],
         )
-
       ],
     );
   }
 
-
-  Widget _otherGoods(){
+  Widget _otherGoods() {
     return Row(
       children: <Widget>[
         _goodsItem(floorGoodList[3]),
@@ -401,13 +375,12 @@ class FloorContent extends StatelessWidget {
     );
   }
 
-
-  Widget _goodsItem(Map goods){
+  Widget _goodsItem(Map goods) {
     return Container(
       width: ScreenUtil().setWidth(375),
       child: InkWell(
         onTap: (){},
-        child: Image.network(goods["author"]["avatar"]),
+        child: Image.network(goods["cover"]["rectangle"]),
 
       ),
     );
