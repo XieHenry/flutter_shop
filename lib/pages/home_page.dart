@@ -19,7 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   @override
   bool get wantKeepAlive => true;
-  
+
   String homePageContent = "正在获取数据";
 
   @override
@@ -107,6 +107,34 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                         }
                       },
                     ),
+
+
+                    //商品推荐
+                    FutureBuilder(
+                      future: getHomeCommendContent(),
+                      builder: (context, recommendSnapshot) {
+                        if (recommendSnapshot.hasData) {
+                          var data = recommendSnapshot.data as Map<String, dynamic>;
+
+                          String floor1Title = "楼层1";
+                          String floor2Title = "楼层2";
+                          String floor3Title = "楼层3";
+
+                          FloorTitle(picture_address: floor1Title);
+                          FloorTitle(picture_address: floor2Title);
+                          FloorTitle(picture_address: floor2Title);
+
+
+                          var floorList = data["data"]["products"] as List<dynamic>;
+                          return FloorContent(floorGoodList: floorList);
+
+                        } else {
+                          return const Center(child: Text("推荐商品加载中......"));
+                        }
+                      },
+                    ),
+
+
 
 
 
@@ -305,6 +333,82 @@ class Recommend extends StatelessWidget {
       margin: const EdgeInsets.only(top: 10),
       child: Column(
         children: <Widget>[_titleWidget(), _recommedList()],
+      ),
+    );
+  }
+}
+
+
+//楼层标题
+class FloorTitle extends StatelessWidget {
+  final String picture_address;
+
+  FloorTitle({Key? key, required this.picture_address}) : super (key: key);
+
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(8),
+      child: Image.network(picture_address),
+    );
+  }
+}
+
+
+
+//楼层商品列表
+class FloorContent extends StatelessWidget {
+  final List floorGoodList;
+
+  FloorContent({Key? key, required this.floorGoodList}) : super (key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _firstRow(),
+          _otherGoods()
+        ],
+      ),
+    );
+  }
+
+
+  Widget _firstRow(){
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoodList[0]),
+        Column(
+          children: <Widget>[
+            _goodsItem(floorGoodList[1]),
+            _goodsItem(floorGoodList[2])
+          ],
+        )
+
+      ],
+    );
+  }
+
+
+  Widget _otherGoods(){
+    return Row(
+      children: <Widget>[
+        _goodsItem(floorGoodList[3]),
+        _goodsItem(floorGoodList[4]),
+      ],
+    );
+  }
+
+
+  Widget _goodsItem(Map goods){
+    return Container(
+      width: ScreenUtil().setWidth(375),
+      child: InkWell(
+        onTap: (){},
+        child: Image.network(goods["author"]["avatar"]),
+
       ),
     );
   }
