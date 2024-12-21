@@ -12,7 +12,14 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+
+/*
+ ** AutomaticKeepAliveClientMixin 页面保持不动
+ */
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+  
   String homePageContent = "正在获取数据";
 
   @override
@@ -245,7 +252,7 @@ class Recommend extends StatelessWidget {
       decoration: const BoxDecoration(
           color: Colors.white,
           border:
-              Border(bottom: BorderSide(width: 0.5, color: Colors.black12))),
+              Border(bottom: BorderSide(width: 1, color: Colors.black12))),
       child: const Text("商品推荐", style: TextStyle(color: Colors.pink)),
     );
   }
