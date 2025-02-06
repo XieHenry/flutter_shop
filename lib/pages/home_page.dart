@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage>
         appBar: AppBar(title: const Text("极客时间")),
         body: FutureBuilder(
           //解决异步请求，不需要动态改变UI
-          future: getHomePageContent(),
+          future: requestHttp("homePageContent", {}),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               // 解析数据
@@ -42,6 +42,23 @@ class _HomePageState extends State<HomePage>
               var scrolist = data["data"]["list"] as List<dynamic>;
 
               var navgatorListlist = data["data"]["list"] as List<dynamic>;
+              var adFormData = {
+                "block_name": "lecture_banner_v2"
+              };
+
+              var tuijianFormData = {
+                "tag_ids": [
+                  5
+                ],
+                "product_type": 1,
+                "product_form": 2,
+                "pvip": 0,
+                "prev": 0,
+                "size": 20,
+                "sort": 4,
+                "with_articles": true
+              };
+
 
               return SingleChildScrollView(
                 //避免超出屏幕
@@ -51,7 +68,7 @@ class _HomePageState extends State<HomePage>
                     TopNavgator(navigatorList: navgatorListlist),
 
                     FutureBuilder(
-                      future: getHomeAdContent(),
+                      future: requestHttp("homeAdContent", adFormData),
                       builder: (context, adSnapshot) {
                         if (adSnapshot.hasData) {
                           var data = adSnapshot.data as Map<String, dynamic>;
@@ -68,7 +85,7 @@ class _HomePageState extends State<HomePage>
                     ),
 
                     FutureBuilder(
-                      future: getHomeAdContent(),
+                      future: requestHttp("homeAdContent", adFormData),
                       builder: (context, adSnapshot) {
                         if (adSnapshot.hasData) {
                           var data = adSnapshot.data as Map<String, dynamic>;
@@ -88,7 +105,7 @@ class _HomePageState extends State<HomePage>
                     ),
 
                     FutureBuilder(
-                      future: getHomeCommendContent(),
+                      future: requestHttp("homeCommendList", tuijianFormData),
                       builder: (context, recommendSnapshot) {
                         if (recommendSnapshot.hasData) {
                           var data =
@@ -104,7 +121,7 @@ class _HomePageState extends State<HomePage>
 
                     //商品推荐
                     FutureBuilder(
-                      future: getHomeCommendContent(),
+                      future: requestHttp("homeCommendList", tuijianFormData),
                       builder: (context, recommendSnapshot) {
                         if (recommendSnapshot.hasData) {
                           var data =
@@ -129,6 +146,9 @@ class _HomePageState extends State<HomePage>
                         }
                       },
                     ),
+
+                    //火爆专区
+                    _HotGoods(),
                   ],
                 ),
               );
@@ -390,6 +410,37 @@ class FloorContent extends StatelessWidget {
           fit: BoxFit.cover,
         ),
       ),
+    );
+  }
+}
+
+
+
+
+class _HotGoods extends StatefulWidget {
+  @override
+  State<_HotGoods> createState() => _HotGoodsState();
+}
+
+class _HotGoodsState extends State<_HotGoods> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    var formData = {
+    "block_name": "lecture_banner_v2"};
+
+    requestHttp("homePageBelowContent",formData).then((val){
+      print(val);
+    });
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Text("jspang"),
     );
   }
 }
