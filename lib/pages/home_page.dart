@@ -110,15 +110,20 @@ class _HomePageState extends State<HomePage>
                           var data =
                               recommendSnapshot.data as Map<String, dynamic>;
 
-
                           var floorList =
                               data["data"]["products"] as List<dynamic>;
 
+                          String floor1Title =
+                              "https://static001.geekbang.org/resource/image/e5/2e/e5cd7aa753e88e4e7561207fb75b512e.png?x-oss-process=image/resize,m_fill,h_90,w_375";
 
-                          String floor1Title = "https://static001.geekbang.org/resource/image/e5/2e/e5cd7aa753e88e4e7561207fb75b512e.png?x-oss-process=image/resize,m_fill,h_118,w_345";
-                          FloorTitle(picture_address: floor1Title);
+                          // return
 
-                          return FloorContent(floorGoodList: floorList);
+                          return Column(
+                            children: <Widget>[
+                              FloorTitle(picture_address: floor1Title),
+                              FloorContent(floorGoodList: floorList),
+                            ],
+                          );
                         } else {
                           return const Center(child: Text("推荐商品加载中......"));
                         }
@@ -331,7 +336,6 @@ class FloorTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
       child: Image.network(picture_address),
     );
   }
@@ -376,12 +380,15 @@ class FloorContent extends StatelessWidget {
   }
 
   Widget _goodsItem(Map goods) {
-    return Container(
+    return SizedBox(
       width: ScreenUtil().setWidth(375),
+      height: ScreenUtil().setHeight(375),
       child: InkWell(
-        onTap: (){},
-        child: Image.network(goods["cover"]["rectangle"]),
-
+        onTap: () {},
+        child: Image.network(
+          goods["cover"]["rectangle"],
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
