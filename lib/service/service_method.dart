@@ -8,7 +8,7 @@ import 'package:flutter_shop/config/httpheaders.dart';
 
 
 //封装的接口请求
-Future requestHttp(url,formData) async {
+Future requestHttp(url,{formData}) async {
   try {
     Response response;
     Dio dio = Dio();

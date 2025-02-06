@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage>
         appBar: AppBar(title: const Text("极客时间")),
         body: FutureBuilder(
           //解决异步请求，不需要动态改变UI
-          future: requestHttp("homePageContent", {}),
+          future: requestHttp("homePageContent"),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               // 解析数据
@@ -68,7 +68,7 @@ class _HomePageState extends State<HomePage>
                     TopNavgator(navigatorList: navgatorListlist),
 
                     FutureBuilder(
-                      future: requestHttp("homeAdContent", adFormData),
+                      future: requestHttp("homeAdContent", formData:adFormData),
                       builder: (context, adSnapshot) {
                         if (adSnapshot.hasData) {
                           var data = adSnapshot.data as Map<String, dynamic>;
@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage>
                     ),
 
                     FutureBuilder(
-                      future: requestHttp("homeAdContent", adFormData),
+                      future: requestHttp("homeAdContent", formData:adFormData),
                       builder: (context, adSnapshot) {
                         if (adSnapshot.hasData) {
                           var data = adSnapshot.data as Map<String, dynamic>;
@@ -105,7 +105,7 @@ class _HomePageState extends State<HomePage>
                     ),
 
                     FutureBuilder(
-                      future: requestHttp("homeCommendList", tuijianFormData),
+                      future: requestHttp("homeCommendList", formData:tuijianFormData),
                       builder: (context, recommendSnapshot) {
                         if (recommendSnapshot.hasData) {
                           var data =
@@ -121,7 +121,7 @@ class _HomePageState extends State<HomePage>
 
                     //商品推荐
                     FutureBuilder(
-                      future: requestHttp("homeCommendList", tuijianFormData),
+                      future: requestHttp("homeCommendList", formData:tuijianFormData),
                       builder: (context, recommendSnapshot) {
                         if (recommendSnapshot.hasData) {
                           var data =
@@ -430,7 +430,7 @@ class _HotGoodsState extends State<_HotGoods> {
     var formData = {
     "block_name": "lecture_banner_v2"};
 
-    requestHttp("homePageBelowContent",formData).then((val){
+    requestHttp("homePageBelowContent",formData:formData).then((val){
       print(val);
     });
   }
